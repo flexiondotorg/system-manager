@@ -401,7 +401,9 @@ fn create_dir_recursively(dir: &Path, state: FileTree) -> EtcActivationResult {
                             )),
                         }
                     } else {
-                        Continue((Ok(state), new_path))
+                        log::debug!("Directory already exists, registering as managed: {}", new_path.display());
+                        let new_state = state.register_managed_entry(&new_path);
+                        Continue((Ok(new_state), new_path))
                     }
                 }
                 (Ok(state), otherwise) => Done((
